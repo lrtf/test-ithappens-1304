@@ -7,31 +7,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * 
+ * @author luis ricardo
+ *
+ */
+
 @Entity
 public class Produto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long codigoProduto;
-	private String nome;
+	private Long codigoProduto;
+	private String descricao;
 	private String codigoBarras;
 	private BigDecimal valorUnitario;
 
 
-	public long getCodigoProduto() {
+	public Long getCodigoProduto() {
 		return codigoProduto;
 	}
 
-	public void setCodigoProduto(long codigoProduto) {
+	public void setCodigoProduto(Long codigoProduto) {
 		this.codigoProduto = codigoProduto;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public String getCodigoBarras() {
