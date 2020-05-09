@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 /**
  * 
@@ -19,23 +20,27 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class ItensPedido {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long item;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "FK_PRODUTO_CODIGO_PRODUTO")
 	private Produto produto;
-	
+
 	@Enumerated(EnumType.STRING)
-	private StatusItensPedido status;
-	
+	private StatusItensPedido status = StatusItensPedido.ATIVO;
+
 	private int quantidade;
-	
+
 	private BigDecimal valorUnitario;
+
+	private BigDecimal total;
 	
-	private BigDecimal valorTotal;
+	@ManyToOne
+	@JoinColumn(name = "FK_PEDIDO_ESTOQUE_CODIGO_ESTOQUE")
+	private PedidoEstoque pedidoEstoque;
 
 	public Long getItem() {
 		return item;
@@ -53,14 +58,6 @@ public class ItensPedido {
 		this.produto = produto;
 	}
 
-	public StatusItensPedido getStatusItensPedido() {
-		return status;
-	}
-
-	public void setStatusItensPedido(StatusItensPedido status) {
-		this.status = status;
-	}
-
 	public int getQuantidade() {
 		return quantidade;
 	}
@@ -76,13 +73,31 @@ public class ItensPedido {
 	public void setValorUnitario(BigDecimal valorUnitario) {
 		this.valorUnitario = valorUnitario;
 	}
-
-	public BigDecimal getValorTotal() {
-		return valorTotal;
+	
+	public BigDecimal getTotal() {
+		return total;
 	}
 
-	public void setValorTotal(BigDecimal valorTotal) {
-		this.valorTotal = valorTotal;
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
+
+	public StatusItensPedido getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusItensPedido status) {
+		this.status = status;
+	}
+
+	public PedidoEstoque getPedidoEstoque() {
+		return pedidoEstoque;
+	}
+
+	public void setPedidoEstoque(PedidoEstoque pedidoEstoque) {
+		this.pedidoEstoque = pedidoEstoque;
+	}
+	
+	
 
 }

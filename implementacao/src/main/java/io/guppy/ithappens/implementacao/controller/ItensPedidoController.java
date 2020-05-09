@@ -1,21 +1,23 @@
 package io.guppy.ithappens.implementacao.controller;
 
-import java.net.URI;
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import io.guppy.ithappens.implementacao.model.PedidoEstoque;
+import io.guppy.ithappens.implementacao.dto.ItensPedidoDto;
+import io.guppy.ithappens.implementacao.dto.ItensPedidoForm;
+import io.guppy.ithappens.implementacao.model.ItensPedido;
+import io.guppy.ithappens.implementacao.service.ItensPedidoService;
 import io.guppy.ithappens.implementacao.service.PedidoEstoqueService;
+import io.guppy.ithappens.implementacao.service.ProdutoService;
 
 /**
  * 
@@ -24,28 +26,37 @@ import io.guppy.ithappens.implementacao.service.PedidoEstoqueService;
  */
 
 @RestController
-@RequestMapping(path = "/rest/pedidos")
+@RequestMapping(path = "/rest/itens")
 public class ItensPedidoController {
+	
+	@Autowired
+	ItensPedidoService itensPedidoService;
+	
+	@Autowired
+	ProdutoService produtoService;
 	
 	@Autowired
 	PedidoEstoqueService pedidoEstoqueService;
 	
 	@GetMapping
-	public ResponseEntity<?> findAll(){
-		return ResponseEntity.ok(pedidoEstoqueService.getAll());
+	ResponseEntity<?> getAll(){
+		return ResponseEntity.ok(itensPedidoService.getAll());
 	}
+
 	
-	@GetMapping(path = "/{id}")
-	public ResponseEntity<?> findById(@PathVariable("id") Long id){
-		return new ResponseEntity<Optional<PedidoEstoque>>(pedidoEstoqueService.findById(id), HttpStatus.OK);
-	}
-	
-	/*TESTE PARA CRIAR UM NOVO PEDIDO NO ESTOQUE - NÃO É RESPONSABILIDADE DESSE CONTROLLER*/
 	@PostMapping
-	public ResponseEntity<?> criaPedidoDeEstoque(@RequestBody PedidoEstoque pedidoEstoque, UriComponentsBuilder uriBuilder) {
-		PedidoEstoque pe = pedidoEstoqueService.save(pedidoEstoque);
-		URI uri = uriBuilder.path("/rest/pedidos/{id}").buildAndExpand(pe.getCodigoPedido()).toUri();
-		return ResponseEntity.created(uri).body(pe);
+	ResponseEntity<?> adicionaItem(@RequestBody ItensPedidoForm form){
+		ItensPedido ip = form.converte(produtoService, pedidoEstoqueService);
+		itensPedidoService.adicionaItem(ip);
+		List<ItensPedido> pedidos = itensPedidoService.getAllItens(ip.getPedidoEstoque().getCodigoPedido());
+			
+		return ResponseEntity.ok(new ItensPedidoDto(pedidos));
+	}
+	
+	@PutMapping("/remove/{idPedido}/{idProduto}")
+	ResponseEntity<?> removeItem(@PathVariable("idPedido") Long idPedido, @PathVariable("idProduto") Long idProduto){
+		itensPedidoService.removeItem(idPedido, idProduto);
+		return ResponseEntity.ok("Produto removido");
 	}
 	
 
