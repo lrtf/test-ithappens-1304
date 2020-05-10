@@ -1,7 +1,6 @@
 package io.guppy.ithappens.implementacao.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,36 +15,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import io.guppy.ithappens.implementacao.model.Produto;
-import io.guppy.ithappens.implementacao.service.ProdutoService;
+import io.guppy.ithappens.implementacao.model.Usuario;
+import io.guppy.ithappens.implementacao.service.UsuarioService;
 
 @RestController
-@RequestMapping(path = "/rest/produtos")
-public class ProdutoController {
+@RequestMapping("/rest/usuarios")
+public class UsuarioController {
 	
 	@Autowired
-	private ProdutoService produtoService;
+	UsuarioService usuarioService;
 	
 	@GetMapping
-	public List<Produto> findAll() {
-		return produtoService.getAll();
+	public ResponseEntity<?> findAll(){
+		return ResponseEntity.ok(usuarioService.getAll());
+	}
+	
+	//Implementar Usuario Dto
+	@GetMapping("/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id){
+		return new ResponseEntity<Usuario>(usuarioService.finById(id), HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Produto produto, UriComponentsBuilder uriBuilder){
-		Produto p = produtoService.save(produto);
-		URI uri = uriBuilder.path("/rest/produtos/{id}").buildAndExpand(p.getCodigoProduto()).toUri();
-		return ResponseEntity.created(uri).body(p);
+	public ResponseEntity<?> save(@RequestBody Usuario usuario, UriComponentsBuilder uriBuilder){
+		Usuario u = usuarioService.save(usuario);
+		URI uri = uriBuilder.path("/rest/usuarios/{id}").buildAndExpand(u.getCodigoUsuario()).toUri();
+		return ResponseEntity.created(uri).body(u);
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Produto produto){
-		return new ResponseEntity<Produto>(produtoService.save(produto), HttpStatus.OK);
+	public ResponseEntity<?> update(@RequestBody Usuario usuario){
+		return new ResponseEntity<Usuario>(usuarioService.save(usuario), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id){
-		produtoService.delete(id);
+		usuarioService.delete(id);
 		return ResponseEntity.ok().build();
 	}
 

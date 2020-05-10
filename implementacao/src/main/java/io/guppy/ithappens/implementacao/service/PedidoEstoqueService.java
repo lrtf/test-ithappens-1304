@@ -19,7 +19,7 @@ public class PedidoEstoqueService {
 	public List<PedidoEstoque> getAll() {
 		return pedidoEstoqueRepository.findAll();
 	}
-
+	
 	public PedidoEstoque save(PedidoEstoque pedidoEstoque) {
 		if (pedidoEstoque != null) {
 			if (pedidoEstoque.getCodigoPedido() == null) {

@@ -2,8 +2,10 @@ package io.guppy.ithappens.implementacao.dto;
 
 import java.math.BigDecimal;
 
+import io.guppy.ithappens.implementacao.model.StatusItensPedido;
+
 public class ResponseItensPedidoDto {
-	private String status;
+	private StatusItensPedido status;
 	private Long codigo;
 	private String codigoBarra;
 	private String descricao;
@@ -17,12 +19,13 @@ public class ResponseItensPedidoDto {
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
-	public String getStatus() {
+	public StatusItensPedido getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	public void setStatus(StatusItensPedido status) {
 		this.status = status;
 	}
+
 	public String getCodigoBarra() {
 		return codigoBarra;
 	}

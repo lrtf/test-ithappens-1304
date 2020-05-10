@@ -1,7 +1,6 @@
 package io.guppy.ithappens.implementacao.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,36 +15,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import io.guppy.ithappens.implementacao.model.Produto;
-import io.guppy.ithappens.implementacao.service.ProdutoService;
+import io.guppy.ithappens.implementacao.model.Filial;
+import io.guppy.ithappens.implementacao.service.FilialService;
 
 @RestController
-@RequestMapping(path = "/rest/produtos")
-public class ProdutoController {
+@RequestMapping("/rest/filiais")
+public class FilialController {
 	
 	@Autowired
-	private ProdutoService produtoService;
+	FilialService filialService;
 	
 	@GetMapping
-	public List<Produto> findAll() {
-		return produtoService.getAll();
+	public ResponseEntity<?> findAll() {
+		return ResponseEntity.ok(filialService.getAll());
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") Long id){
+		return new ResponseEntity<Filial>(filialService.findById(id), HttpStatus.OK);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody Produto produto, UriComponentsBuilder uriBuilder){
-		Produto p = produtoService.save(produto);
-		URI uri = uriBuilder.path("/rest/produtos/{id}").buildAndExpand(p.getCodigoProduto()).toUri();
-		return ResponseEntity.created(uri).body(p);
+	public ResponseEntity<?> save(@RequestBody Filial filial, UriComponentsBuilder uriBuilder){
+		Filial f = filialService.save(filial);
+		URI uri = uriBuilder.path("/rest/filiais/{id}").buildAndExpand(f.getCodigoFilial()).toUri();
+		return ResponseEntity.created(uri).body(f);
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Produto produto){
-		return new ResponseEntity<Produto>(produtoService.save(produto), HttpStatus.OK);
+	public ResponseEntity<?> update(@RequestBody Filial filial){
+		return new ResponseEntity<Filial>(filialService.save(filial), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id){
-		produtoService.delete(id);
+		filialService.delete(id);
 		return ResponseEntity.ok().build();
 	}
 

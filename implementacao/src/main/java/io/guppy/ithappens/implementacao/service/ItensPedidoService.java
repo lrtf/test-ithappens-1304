@@ -44,28 +44,6 @@ public class ItensPedidoService {
 			return itensPedidoRepository.findById(id).get();
 		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dados invalidos");
 	}
-
-//	public ItensPedido adicionaItem(ItensPedido itens) {
-//		if (itens != null && itens.getQuantidade() > 0) {
-//			List<ItensPedido> itensPedidos = itensPedidoRepository
-//					.findAllByPedidoEstoqueCodigoPedido(itens.getPedidoEstoque().getCodigoPedido());
-//			for (ItensPedido ip : itensPedidos) {
-//				if (ip.getProduto().getCodigoProduto() == itens.getProduto().getCodigoProduto()
-//						&& (ip.getStatus().equals(StatusItensPedido.ATIVO)
-//								|| ip.getStatus().equals(StatusItensPedido.PROCESSADO))) {
-//					throw new RuntimeException("O item já está cadastrado no pedido!");
-//				}
-//			}
-//
-//			itens.setValorUnitario(itens.getProduto().getValorUnitario());
-//			itens.setValorTotal(itens.getProduto().getValorUnitario()
-//					.multiply(new BigDecimal(BigInteger.ZERO, itens.getQuantidade())));
-//
-//			return itensPedidoRepository.save(itens);
-//		}
-//		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Dados invalidos");
-//
-//	}
 	
 	public ItensPedido adicionaItem(ItensPedido itens) {
 		if (itens != null && itens.getQuantidade() > 0) {
@@ -89,7 +67,9 @@ public class ItensPedidoService {
 	}
 
 	public List<ItensPedido> getAllItens(Long codigoPedidoEstoque) {
-		return itensPedidoRepository.findAllByPedidoEstoqueCodigoPedido(codigoPedidoEstoque);
+		return itensPedidoRepository.findAllByPedidoEstoqueCodigoPedido(codigoPedidoEstoque).stream()
+				.filter(item -> item.getStatus().equals(StatusItensPedido.ATIVO) || item.getStatus().equals(StatusItensPedido.PROCESSADO))
+				.collect(Collectors.toList());
 	}
 
 }
