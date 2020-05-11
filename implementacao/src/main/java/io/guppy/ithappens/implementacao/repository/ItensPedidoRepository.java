@@ -14,4 +14,6 @@ public interface ItensPedidoRepository extends JpaRepository<ItensPedido, Long> 
 	Optional<ItensPedido> findByPedidoEstoqueCodigoPedidoAndProdutoCodigoProduto(Long idPedido, Long idProduto);
 
 	List<ItensPedido> findAllByPedidoEstoqueCodigoPedido(Long id);
+	
+	List<ItensPedido> findAllByPedidoEstoqueFilialCodigoFilial(Long id);
 }

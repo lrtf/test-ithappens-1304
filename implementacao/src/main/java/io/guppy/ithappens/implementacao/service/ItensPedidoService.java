@@ -71,5 +71,5 @@ public class ItensPedidoService {
 				.filter(item -> item.getStatus().equals(StatusItensPedido.ATIVO) || item.getStatus().equals(StatusItensPedido.PROCESSADO))
 				.collect(Collectors.toList());
 	}
-
+	
 }
