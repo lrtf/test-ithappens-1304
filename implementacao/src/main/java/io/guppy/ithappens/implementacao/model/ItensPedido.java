@@ -38,7 +38,8 @@ public class ItensPedido {
 	private BigDecimal total;
 	
 	@ManyToOne
-	@JoinColumn(name = "FK_PEDIDO_ESTOQUE_CODIGO_ESTOQUE")
+	//@JoinColumn(name = "FK_PEDIDO_ESTOQUE_CODIGO_ESTOQUE")
+	@JoinColumn(name = "FK_PEDIDO_ESTOQUE_CODIGO_PEDIDO")
 	private PedidoEstoque pedidoEstoque;
 
 	public Long getItem() {
